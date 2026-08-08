@@ -1,0 +1,31 @@
+══════════════════════════════════════════════════════
+VERCEL ENVIRONMENT VARIABLES
+══════════════════════════════════════════════════════
+
+Add these in Vercel Dashboard → Project → Settings → Environment Variables
+
+NAME                          DESCRIPTION
+─────────────────────────     ─────────────────────────────────────
+SUPABASE_URL                  Your Supabase project URL
+SUPABASE_SERVICE_ROLE_KEY     Your Supabase service role key
+NEXT_PUBLIC_SUPABASE_URL      Same as SUPABASE_URL
+
+NEXTAUTH_URL                  https://YOUR-PROJECT.vercel.app
+NEXTAUTH_SECRET               Generate: openssl rand -base64 32
+
+CLOUDINARY_CLOUD_NAME         Your Cloudinary cloud name
+CLOUDINARY_API_KEY            Your Cloudinary API key
+CLOUDINARY_API_SECRET         Your Cloudinary API secret
+
+EMAIL_USER                    Your Gmail address
+EMAIL_PASS                    Your Gmail app password
+
+GROQ_API_KEY                  Get free key at console.groq.com
+
+ADMIN_HTTP_USER               admin
+ADMIN_HTTP_PASSWORD           Set a strong password
+
+══════════════════════════════════════════════════════
+⚠️  NEVER commit actual secret values to GitHub!
+    Use .env.local for local development only.
+══════════════════════════════════════════════════════

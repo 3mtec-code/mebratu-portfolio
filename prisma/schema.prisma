@@ -1,0 +1,235 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Site settings (single-row config)
+model SiteSettings {
+  id              String   @id @default(cuid())
+  logoUrl         String
+  faviconUrl      String
+  siteName        String
+  tagline         String
+  email           String
+  phone           String
+  location        String
+  cvUrl           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Hero section profile images
+model HeroProfile {
+  id              String   @id @default(cuid())
+  heroImageUrl    String
+  aboutImageUrl   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Social media links (dynamic list)
+model SocialLink {
+  id          String   @id @default(cuid())
+  platform    String   // LinkedIn, GitHub, Twitter, etc.
+  url         String
+  icon        String   // Icon name from lucide-react
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Hero stats (30+ years, 120+ projects, etc.)
+model HeroStat {
+  id          String   @id @default(cuid())
+  label       String   // "Years Experience", "Projects Completed", etc.
+  value       String   // "30+", "120+", etc.
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Info cards beside hero
+model InfoCard {
+  id          String   @id @default(cuid())
+  title       String   // "UI/UX Designer", "Full Stack Developer", etc.
+  description String
+  icon        String   // Icon name
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Timeline entries for My Journey
+model TimelineEntry {
+  id          String   @id @default(cuid())
+  year        String
+  title       String
+  description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Skills with progress bars
+model Skill {
+  id          String   @id @default(cuid())
+  name        String
+  percentage  Int
+  category    String?  // "Frontend", "Backend", "Database", etc.
+  icon        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Projects
+model Project {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  longDescription String?  @db.Text
+  coverImageUrl   String
+  category        String   // "Web Apps", "Mobile Apps", "UI/UX", "AI", "Full Stack"
+  tags            String[] // Tech stack tags
+  liveUrl         String?
+  githubUrl       String?
+  featured        Boolean  @default(false)
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Certificates
+model Certificate {
+  id                String   @id @default(cuid())
+  title             String
+  issuer            String
+  issueDate         DateTime
+  verificationUrl   String?
+  certificateImageUrl String
+  description       String?
+  order             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// Awards
+model Award {
+  id          String   @id @default(cuid())
+  title       String
+  issuer      String
+  issueDate   DateTime
+  description String?
+  imageUrl    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Testimonials
+model Testimonial {
+  id          String   @id @default(cuid())
+  reviewerName String
+  reviewerRole String
+  reviewerCompany String?
+  reviewerImageUrl String?
+  quote       String   @db.Text
+  rating      Int      @default(5)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Videos
+model Video {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  videoUrl    String   // YouTube embed URL or video file URL
+  thumbnailUrl String?
+  duration    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Services
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  icon        String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Blog posts (optional)
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String   @db.Text
+  coverImageUrl String?
+  published   Boolean  @default(false)
+  tags        String[]
+  author      String   @default("Mebratu Muhabaw")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Admin user for authentication
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

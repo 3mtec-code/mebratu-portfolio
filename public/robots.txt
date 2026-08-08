@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block admin panel from search engines
+Disallow: /mgmt-x7k2p9/
+
+Sitemap: https://yourdomain.com/sitemap.xml
