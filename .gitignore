@@ -38,3 +38,5 @@ next-env.d.ts
 # Local image uploads (dev fallback — use Cloudinary in production)
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+vercel.env
