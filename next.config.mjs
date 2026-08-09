@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Force clean output on each build
+    cleanDistDir: true,
     images: {
-        // Allow local /uploads/ path (dev fallback when Cloudinary isn't configured)
         localPatterns: [
             { pathname: '/uploads/**' },
         ],
@@ -12,6 +13,7 @@ const nextConfig = {
             { protocol: 'https', hostname: '**.supabase.co' },
             { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
             { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+            { protocol: 'https', hostname: 'upload.wikimedia.org' },
         ],
     },
     async headers() {
@@ -23,21 +25,8 @@ const nextConfig = {
                     { key: 'X-Content-Type-Options', value: 'nosniff' },
                     { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
                     { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-                    {
-                        key: 'Content-Security-Policy',
-                        value: [
-                            "default-src 'self'",
-                            "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google.com https://www.gstatic.com",
-                            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-                            "font-src 'self' https://fonts.gstatic.com",
-                            "img-src 'self' data: blob: https:",
-                            "connect-src 'self' https://api.cloudinary.com https://*.supabase.co https://vitals.vercel-insights.com",
-                            "frame-src 'self' https://www.youtube.com https://www.google.com",
-                        ].join('; '),
-                    },
                 ],
             },
-            // Admin routes — no-index
             {
                 source: '/mgmt-x7k2p9(.*)',
                 headers: [
