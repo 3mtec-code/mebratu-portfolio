@@ -18,7 +18,7 @@ interface AwardsPreviewProps {
     awards?: Award[]
 }
 
-export default function AwardsPreview({ awards = [], sectionTitle = 'Awards' }: AwardsPreviewProps) {
+export default function AwardsPreview({ awards = [] }: AwardsPreviewProps) {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">

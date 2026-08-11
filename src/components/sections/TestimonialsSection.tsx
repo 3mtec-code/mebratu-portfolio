@@ -21,7 +21,7 @@ interface TestimonialsSectionProps {
     testimonials?: Testimonial[]
 }
 
-export default function TestimonialsSection({ testimonials = [], sectionTitle = 'What People Say' }: TestimonialsSectionProps) {
+export default function TestimonialsSection({ testimonials = [] }: TestimonialsSectionProps) {
     const [current, setCurrent] = useState(0)
 
     const prev = () => setCurrent((c) => (c === 0 ? testimonials.length - 1 : c - 1))

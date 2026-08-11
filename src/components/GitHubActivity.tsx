@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaGithub } from 'react-icons/fa'
-import { GitCommitHorizontal, Star, GitFork, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 interface GitHubEvent {
     id: string

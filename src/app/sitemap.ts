@@ -5,7 +5,6 @@ const BASE = process.env.NEXTAUTH_URL ?? 'https://mebratumuhabaw.dev'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const store = readStore()
-    const projects = store.projects as any[]
     const posts = (store.blogPosts as any[]).filter((p: any) => p.published)
 
     const staticRoutes: MetadataRoute.Sitemap = [

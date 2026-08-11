@@ -19,7 +19,7 @@ interface CertificatesPreviewProps {
     certificates?: Certificate[]
 }
 
-export default function CertificatesPreview({ certificates = [], sectionTitle = 'Certificates' }: CertificatesPreviewProps) {
+export default function CertificatesPreview({ certificates = [] }: CertificatesPreviewProps) {
     const [current, setCurrent] = useState(0)
 
     if (!certificates.length) return null

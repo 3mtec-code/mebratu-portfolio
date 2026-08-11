@@ -1,5 +1,5 @@
 import { getAllData } from '@/lib/dal'
-import { computeStats, readStore } from '@/lib/store'
+import { computeStats } from '@/lib/store'
 import type { Metadata } from 'next'
 import { buildMetadata } from '@/lib/seo'
 import HeroSection from '@/components/sections/HeroSection'
@@ -14,8 +14,6 @@ import AwardsPreview from '@/components/sections/AwardsPreview'
 import VideosSection from '@/components/sections/VideosSection'
 import ContactSection from '@/components/sections/ContactSection'
 import TechStackSection from '@/components/sections/TechStackSection'
-import ReviewForm from '@/components/sections/ReviewForm'
-import WorldMap from '@/components/WorldMap'
 
 // ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
 export const revalidate = 3600

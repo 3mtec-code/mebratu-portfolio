@@ -36,7 +36,7 @@ const gradients = [
     'from-indigo-500 to-blue-400',
 ]
 
-export default function ServicesSection({ services = [], sectionLabel = 'WHAT I DO', sectionTitle = 'Services I Provide' }: ServicesSectionProps) {
+export default function ServicesSection({ services = [], sectionTitle = 'Services I Provide' }: ServicesSectionProps) {
     const sorted = [...services].sort((a, b) => a.order - b.order)
 
     return (

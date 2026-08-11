@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, Tag, ArrowRight } from 'lucide-react'
 import { FaGithub } from 'react-icons/fa'
-import { cn } from '@/lib/utils'
 
 interface Project {
     id: string

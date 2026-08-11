@@ -3,11 +3,6 @@ const nextConfig = {
     // Clean previous build output completely
     cleanDistDir: true,
 
-    // Fix Vercel ENOENT error with route groups - include all server app files
-    outputFileTracingIncludes: {
-        '/*': ['./.next/server/app/**/*'],
-    },
-
     images: {
         // Cache optimized images for 24 hours on Vercel's edge
         minimumCacheTTL: 86400,

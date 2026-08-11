@@ -21,7 +21,7 @@ interface VideosSectionProps {
     limit?: number
 }
 
-export default function VideosSection({ videos = [], limit, sectionTitle = 'Latest Videos' }: VideosSectionProps) {
+export default function VideosSection({ videos = [], limit }: VideosSectionProps) {
     const sorted = [...videos].sort((a, b) => a.order - b.order)
     const displayed = limit ? sorted.slice(0, limit) : sorted
 

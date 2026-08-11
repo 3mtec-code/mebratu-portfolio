@@ -4,10 +4,9 @@ import { useState, useEffect, useCallback } from 'react'
 
 interface UseCrudOptions<T> {
     apiPath: string
-    defaultForm?: Record<string, unknown>
 }
 
-export function useCrud<T extends { id: string }>({ apiPath, defaultForm = {} }: UseCrudOptions<T>) {
+export function useCrud<T extends { id: string }>({ apiPath }: UseCrudOptions<T>) {
     const [items, setItems] = useState<T[]>([])
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)

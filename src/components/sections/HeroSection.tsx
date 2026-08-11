@@ -6,7 +6,6 @@ import { motion } from 'framer-motion'
 import { ArrowRight, ChevronRight, Palette, Code2, Lightbulb } from 'lucide-react'
 import SocialIcon from '@/components/SocialIcon'
 import OnlineStatusBadge from '@/components/OnlineStatusBadge'
-import { useI18n } from '@/lib/i18n/context'
 
 interface InfoCard { id: string; title: string; description: string; icon: string }
 interface SocialLink { id: string; platform: string; url: string; icon: string }
@@ -48,8 +47,8 @@ export default function HeroSection({
     onlineStatus = 'available',
     heroHeadline = 'I build digital products that make impact.',
     heroSubtext = "Hi, I'm Mebratu - a Full Stack Software Developer specializing in AI-powered applications, secure system architecture, and cybersecurity across Windows & Linux (Ubuntu) environments.",
-    heroCta1     = 'Hire Me',
-    heroCta2     = 'View My Work',
+    heroCta1 = 'Hire Me',
+    heroCta2 = 'View My Work',
     followMeLabel = 'Follow me on',
 }: HeroSectionProps) {
     return (
