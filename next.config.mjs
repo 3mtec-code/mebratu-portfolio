@@ -3,6 +3,15 @@ const nextConfig = {
     // Clean previous build output completely
     cleanDistDir: true,
 
+    // Fix Vercel build trace error with route groups (Next.js 14 bug)
+    outputFileTracingExcludes: {
+        '*': [
+            'node_modules/@swc/core-linux-x64-gnu',
+            'node_modules/@swc/core-linux-x64-musl',
+            'node_modules/@esbuild/linux-x64',
+        ],
+    },
+
     images: {
         // Cache optimized images for 24 hours on Vercel's edge
         minimumCacheTTL: 86400,
