@@ -9,6 +9,10 @@ const nextConfig = {
     },
 
     images: {
+        // Cache optimized images for 24 hours on Vercel's edge
+        minimumCacheTTL: 86400,
+        // Serve modern image formats (avif first, then webp) — smaller file sizes
+        formats: ['image/avif', 'image/webp'],
         localPatterns: [
             { pathname: '/uploads/**' },
         ],
@@ -38,6 +42,14 @@ const nextConfig = {
                 source: '/mgmt-x7k2p9(.*)',
                 headers: [
                     { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+                ],
+            },
+            {
+                // Public API routes (not admin) — cache at CDN edge for 1 hour,
+                // serve stale while revalidating in background for up to 24 hours
+                source: '/api/((?!admin|auth).*)',
+                headers: [
+                    { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
                 ],
             },
         ]

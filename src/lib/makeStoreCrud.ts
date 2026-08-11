@@ -44,7 +44,7 @@ export function makeStoreCrud(key: ListKey) {
             const body = await req.json()
             const payload = toSnakeCase({ id: randomUUID(), order: 0, ...body })
             const created = await createItem(key as any, payload)
-            revalidateAll()
+            await revalidateAll()
             return NextResponse.json(created, { status: 201 })
         } catch (e: unknown) {
             return NextResponse.json({ error: e instanceof Error ? e.message : 'Error' }, { status: 500 })
@@ -58,7 +58,7 @@ export function makeStoreCrud(key: ListKey) {
             const body = await req.json()
             const payload = toSnakeCase(body)
             const updated = await updateItem(key as any, params.id, payload)
-            revalidateAll()
+            await revalidateAll()
             return NextResponse.json(updated)
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : 'Error'
@@ -72,7 +72,7 @@ export function makeStoreCrud(key: ListKey) {
         if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         try {
             await deleteItemDal(key as any, params.id)
-            revalidateAll()
+            await revalidateAll()
             return NextResponse.json({ success: true })
         } catch (e: unknown) {
             return NextResponse.json({ error: e instanceof Error ? e.message : 'Error' }, { status: 500 })

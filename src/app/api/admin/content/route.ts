@@ -16,6 +16,6 @@ export async function PUT(req: NextRequest) {
     const current = await getSettings('siteContent') as Record<string, unknown>
     const updated = { ...current, ...body }
     await updateSettings('siteContent', updated)
-    revalidateAll()
+    await revalidateAll()
     return NextResponse.json(updated)
 }

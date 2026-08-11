@@ -6,7 +6,8 @@ import { readStore } from '@/lib/store'
 import { formatDate, calcReadingTime } from '@/lib/utils'
 import { ArrowLeft } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const store = readStore()
@@ -37,8 +38,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         <span>{post.author || 'Mebratu Muhabaw'}</span>
                         <span>•</span>
                         <span>{formatDate(post.createdAt || new Date())}</span>
-            <span>•</span>
-            <span>{post.read_time_min || calcReadingTime(post.content || '')} min read</span>
+                        <span>•</span>
+                        <span>{post.read_time_min || calcReadingTime(post.content || '')} min read</span>
                     </div>
                     {post.coverImageUrl && (
                         <div className="relative aspect-video rounded-2xl overflow-hidden mb-10">

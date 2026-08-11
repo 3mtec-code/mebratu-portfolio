@@ -31,6 +31,47 @@ import {
     normalizeVideo,
 } from './dal-normalize'
 
+// ─── Redis Cache (optional — only active when Upstash env vars are set) ───────
+const CACHE_TTL = 3600 // 1 hour in seconds
+const CACHE_KEY = 'portfolio:all'
+
+async function getCacheClient() {
+    if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) return null
+    try {
+        const { Redis } = await import('@upstash/redis')
+        return Redis.fromEnv()
+    } catch {
+        return null
+    }
+}
+
+async function getCachedData(): Promise<StoreData | null> {
+    const redis = await getCacheClient()
+    if (!redis) return null
+    try {
+        return await redis.get<StoreData>(CACHE_KEY)
+    } catch {
+        return null
+    }
+}
+
+async function setCachedData(data: StoreData): Promise<void> {
+    const redis = await getCacheClient()
+    if (!redis) return
+    try {
+        await redis.set(CACHE_KEY, data, { ex: CACHE_TTL })
+    } catch { /* non-critical — continue without cache */ }
+}
+
+/** Bust the Redis data cache — called after any admin save */
+export async function bustDataCache(): Promise<void> {
+    const redis = await getCacheClient()
+    if (!redis) return
+    try {
+        await redis.del(CACHE_KEY)
+    } catch { /* non-critical */ }
+}
+
 // ─── Supabase Client (lazy init) ──────────────────────────────────────────────
 let _supabase: SupabaseClient | null = null
 
@@ -80,8 +121,17 @@ const SETTINGS_TABLES: Partial<Record<keyof StoreData, string>> = {
 
 /** ሁሉንም data አንድ ጊዜ ያነባል — homepage ላይ ጥቅም ላይ ይውላል */
 export async function getAllData(): Promise<StoreData> {
+    // 1. Try Redis cache first (fast path — ~1ms from Upstash edge)
+    const cached = await getCachedData()
+    if (cached) return cached
+
+    // 2. Cache miss — fetch from Supabase or local store
     const sb = getSupabase()
-    if (!sb) return readStoreAsync()
+    if (!sb) {
+        const data = await readStoreAsync()
+        await setCachedData(data)
+        return data
+    }
 
     try {
         // Fetch all tables in parallel
@@ -127,7 +177,7 @@ export async function getAllData(): Promise<StoreData> {
             sb.from('tech_stack').select('*').order('order'),
         ])
 
-        return {
+        const result: StoreData = {
             siteSettings: normalizeSiteSettings((siteSettingsRes.data ?? DEFAULTS.siteSettings) as any),
             heroProfile: normalizeHeroProfile((heroProfileRes.data ?? DEFAULTS.heroProfile) as any),
             siteContent: normalizeSiteContent((siteContentRes.data ?? DEFAULTS.siteContent) as any),
@@ -149,6 +199,11 @@ export async function getAllData(): Promise<StoreData> {
             techStack: techRes.data ?? DEFAULTS.techStack,
             translations: {},
         }
+
+        // 3. Warm the cache for subsequent requests (non-blocking)
+        setCachedData(result).catch(() => { })
+
+        return result
     } catch (err) {
         console.error('[DAL] Supabase getAllData failed, falling back to store.json', err)
         return readStoreAsync()

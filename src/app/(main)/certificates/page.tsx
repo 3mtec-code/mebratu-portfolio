@@ -5,12 +5,13 @@ import { readStore } from '@/lib/store'
 import { ExternalLink, Trophy } from 'lucide-react'
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Certificates & Awards — Mebratu Muhabaw',
-  description: 'Professional certifications and awards earned by Mebratu Muhabaw.',
-  path: '/certificates',
+    title: 'Certificates & Awards — Mebratu Muhabaw',
+    description: 'Professional certifications and awards earned by Mebratu Muhabaw.',
+    path: '/certificates',
 })
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export default function CertificatesPage() {
     const store = readStore()

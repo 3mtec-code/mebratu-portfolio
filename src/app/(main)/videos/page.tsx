@@ -4,12 +4,13 @@ import { readStore } from '@/lib/store'
 import { Play } from 'lucide-react'
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Videos — Mebratu Muhabaw',
-  description: 'Watch tutorials and project showcases from Mebratu Muhabaw.',
-  path: '/videos',
+    title: 'Videos — Mebratu Muhabaw',
+    description: 'Watch tutorials and project showcases from Mebratu Muhabaw.',
+    path: '/videos',
 })
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export default function VideosPage() {
     const store = readStore()

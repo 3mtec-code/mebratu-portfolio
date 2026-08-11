@@ -11,7 +11,8 @@ export const metadata: Metadata = buildMetadata({
     path: '/blog',
 })
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export default function BlogPage() {
     const store = readStore()

@@ -17,7 +17,8 @@ import TechStackSection from '@/components/sections/TechStackSection'
 import ReviewForm from '@/components/sections/ReviewForm'
 import WorldMap from '@/components/WorldMap'
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
     try {

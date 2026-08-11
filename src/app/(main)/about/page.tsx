@@ -12,7 +12,8 @@ export const metadata: Metadata = buildMetadata({
     keywords: ['About', 'Full Stack', 'AI', 'Cybersecurity', 'Software Engineer', 'UI/UX', 'Ethiopia'],
 })
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export default function AboutPage() {
     const store = readStore()

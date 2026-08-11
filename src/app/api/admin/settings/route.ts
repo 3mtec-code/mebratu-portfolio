@@ -14,6 +14,6 @@ export async function PUT(req: NextRequest) {
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const body = await req.json()
     const updated = await updateSettings('siteSettings', body)
-    revalidateAll()
+    await revalidateAll()
     return NextResponse.json(updated)
 }

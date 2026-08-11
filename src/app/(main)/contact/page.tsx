@@ -4,12 +4,13 @@ import { readStore } from '@/lib/store'
 import ContactSection from '@/components/sections/ContactSection'
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Contact — Mebratu Muhabaw',
-  description: 'Get in touch with Mebratu Muhabaw for collaborations and projects.',
-  path: '/contact',
+    title: 'Contact — Mebratu Muhabaw',
+    description: 'Get in touch with Mebratu Muhabaw for collaborations and projects.',
+    path: '/contact',
 })
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export default function ContactPage() {
     const store = readStore()

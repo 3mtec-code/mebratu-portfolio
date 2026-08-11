@@ -4,12 +4,13 @@ import { readStore } from '@/lib/store'
 import ProjectsSection from '@/components/sections/ProjectsSection'
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Projects — Mebratu Muhabaw',
-  description: 'Browse all projects by Mebratu Muhabaw — web apps, mobile apps, AI solutions.',
-  path: '/projects',
+    title: 'Projects — Mebratu Muhabaw',
+    description: 'Browse all projects by Mebratu Muhabaw — web apps, mobile apps, AI solutions.',
+    path: '/projects',
 })
 
-export const dynamic = 'force-dynamic'
+// ISR: rebuild cached page every hour; admin saves bust this immediately via revalidatePath()
+export const revalidate = 3600
 
 export default function ProjectsPage() {
     const store = readStore()
