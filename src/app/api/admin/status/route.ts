@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth-options'
+import { isAdminAuthorized } from '@/lib/admin-auth'
 import { getSettings, updateSettings } from '@/lib/dal'
 import { revalidatePath } from 'next/cache'
 
@@ -15,8 +14,8 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
-    const session = await getServerSession(authOptions)
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authorized = await isAdminAuthorized(req)
+    if (!authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const { onlineStatus } = await req.json()
     if (!['available', 'busy', 'offline'].includes(onlineStatus)) {
         return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
@@ -26,4 +25,3 @@ export async function PUT(req: NextRequest) {
     revalidatePath('/', 'layout')
     return NextResponse.json({ success: true, onlineStatus })
 }
-

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth-options'
+import { isAdminAuthorized } from '@/lib/admin-auth'
 import { v2 as cloudinary } from 'cloudinary'
 
 export const dynamic = 'force-dynamic'
@@ -19,8 +18,8 @@ function extractPublicId(url: string): string {
 }
 
 export async function DELETE(req: NextRequest) {
-    const session = await getServerSession(authOptions)
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authorized = await isAdminAuthorized(req)
+    if (!authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     try {
         const { url } = await req.json()
@@ -45,4 +44,3 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ error: 'Delete failed' }, { status: 500 })
     }
 }
-

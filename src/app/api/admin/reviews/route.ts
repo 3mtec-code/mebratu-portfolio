@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth-options'
+import { isAdminAuthorized } from '@/lib/admin-auth'
 import { getList, createItem, deleteItemDal } from '@/lib/dal'
 import { revalidatePath } from 'next/cache'
 import { randomUUID } from 'crypto'
@@ -8,17 +7,17 @@ import { randomUUID } from 'crypto'
 export const dynamic = 'force-dynamic'
 
 // GET — all pending reviews
-export async function GET() {
-    const session = await getServerSession(authOptions)
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function GET(req: NextRequest) {
+    const authorized = await isAdminAuthorized(req)
+    if (!authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const reviews = await getList('pendingReviews')
     return NextResponse.json(reviews)
 }
 
 // POST — approve: move pending → testimonials
 export async function POST(req: NextRequest) {
-    const session = await getServerSession(authOptions)
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authorized = await isAdminAuthorized(req)
+    if (!authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { id } = await req.json()
     const pending = await getList('pendingReviews')
@@ -47,10 +46,9 @@ export async function POST(req: NextRequest) {
 
 // DELETE — reject a pending review
 export async function DELETE(req: NextRequest) {
-    const session = await getServerSession(authOptions)
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authorized = await isAdminAuthorized(req)
+    if (!authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const { id } = await req.json()
     await deleteItemDal('pendingReviews', id)
     return NextResponse.json({ success: true })
 }
-
