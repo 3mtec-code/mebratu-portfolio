@@ -13,10 +13,12 @@ export function middleware(request: NextRequest) {
     // Skip Basic Auth for:
     // - The login page itself
     // - NextAuth API routes (sign-in callback, session checks)
+    // - Admin API routes (protected by NextAuth session instead)
     const isLoginPage = pathname === `${ADMIN_PATH}/login`
     const isNextAuthApi = pathname.startsWith('/api/auth')
+    const isAdminApi = pathname.startsWith('/api/admin')
 
-    if (isLoginPage || isNextAuthApi) {
+    if (isLoginPage || isNextAuthApi || isAdminApi) {
         return NextResponse.next()
     }
 
