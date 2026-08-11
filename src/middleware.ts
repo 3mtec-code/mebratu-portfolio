@@ -5,24 +5,22 @@ const ADMIN_PATH = '/mgmt-x7k2p9'
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
 
-    // Only apply to admin paths
+    // Only apply Basic Auth to admin UI pages — NOT to API routes
     if (!pathname.startsWith(ADMIN_PATH)) {
         return NextResponse.next()
     }
 
     // Skip Basic Auth for:
     // - The login page itself
-    // - NextAuth API routes (sign-in callback, session checks)
-    // - Admin API routes (protected by NextAuth session instead)
+    // - NextAuth API routes
     const isLoginPage = pathname === `${ADMIN_PATH}/login`
     const isNextAuthApi = pathname.startsWith('/api/auth')
-    const isAdminApi = pathname.startsWith('/api/admin')
 
-    if (isLoginPage || isNextAuthApi || isAdminApi) {
+    if (isLoginPage || isNextAuthApi) {
         return NextResponse.next()
     }
 
-    // Require Basic HTTP Auth for everything else under /mgmt-x7k2p9
+    // Require Basic HTTP Auth for admin UI pages only
     const authHeader = request.headers.get('authorization')
 
     if (authHeader) {
@@ -56,5 +54,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/mgmt-x7k2p9/:path*'],
+    // Only match admin UI pages — exclude /api/* entirely
+    matcher: ['/mgmt-x7k2p9', '/mgmt-x7k2p9/((?!api).*)'],
 }
