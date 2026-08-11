@@ -5,6 +5,8 @@ import { getList, createItem, deleteItemDal } from '@/lib/dal'
 import { revalidatePath } from 'next/cache'
 import { randomUUID } from 'crypto'
 
+export const dynamic = 'force-dynamic'
+
 // GET — all pending reviews
 export async function GET() {
     const session = await getServerSession(authOptions)
@@ -51,3 +53,4 @@ export async function DELETE(req: NextRequest) {
     await deleteItemDal('pendingReviews', id)
     return NextResponse.json({ success: true })
 }
+

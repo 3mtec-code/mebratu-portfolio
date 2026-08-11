@@ -4,6 +4,8 @@ import { checkContactFormRateLimit } from '@/lib/rate-limit'
 import { sendContactEmail } from '@/lib/mailer'
 import { readStore } from '@/lib/store'
 
+export const dynamic = 'force-dynamic'
+
 const schema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
     email: z.string().email('Please enter a valid email'),

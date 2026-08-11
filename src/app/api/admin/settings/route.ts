@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth-options'
 import { getSettings, updateSettings } from '@/lib/dal'
 import { revalidateAll } from '@/lib/revalidate'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
     const data = await getSettings('siteSettings')
     return NextResponse.json(data)
@@ -17,3 +19,4 @@ export async function PUT(req: NextRequest) {
     await revalidateAll()
     return NextResponse.json(updated)
 }
+

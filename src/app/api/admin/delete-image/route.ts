@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-options'
 import { v2 as cloudinary } from 'cloudinary'
 
+export const dynamic = 'force-dynamic'
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -43,3 +45,4 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ error: 'Delete failed' }, { status: 500 })
     }
 }
+

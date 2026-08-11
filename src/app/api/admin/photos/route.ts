@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth-options'
 import { getSettings, updateSettings } from '@/lib/dal'
 import { revalidateAll } from '@/lib/revalidate'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
     const data = await getSettings('heroProfile')
     return NextResponse.json(data)

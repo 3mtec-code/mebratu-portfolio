@@ -4,6 +4,8 @@ import { createItem, getSettings } from '@/lib/dal'
 import { sendReviewNotification } from '@/lib/mailer'
 import { randomUUID } from 'crypto'
 
+export const dynamic = 'force-dynamic'
+
 const schema = z.object({
     reviewerName: z.string().min(2),
     reviewerRole: z.string().min(2),

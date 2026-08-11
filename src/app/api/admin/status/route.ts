@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth-options'
 import { getSettings, updateSettings } from '@/lib/dal'
 import { revalidatePath } from 'next/cache'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
     const settings = await getSettings('siteSettings')
     const s = settings as Record<string, unknown>
@@ -24,3 +26,4 @@ export async function PUT(req: NextRequest) {
     revalidatePath('/', 'layout')
     return NextResponse.json({ success: true, onlineStatus })
 }
+

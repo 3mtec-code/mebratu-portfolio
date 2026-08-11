@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkAIAssistantRateLimit } from '@/lib/rate-limit'
 import { getAllData } from '@/lib/dal'
 
+export const dynamic = 'force-dynamic'
+
 interface ChatMessage {
     role: 'user' | 'assistant'
     content: string
