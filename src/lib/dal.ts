@@ -234,7 +234,18 @@ export async function updateSettings<K extends keyof typeof SETTINGS_TABLES>(
         return value
     }
     const table = SETTINGS_TABLES[key]!
-    const payload = { ...value, id: 'default' }
+
+    // Convert camelCase keys → snake_case for Supabase columns
+    const toSnake = (obj: StoreRecord): StoreRecord => {
+        const result: StoreRecord = {}
+        for (const [k, v] of Object.entries(obj)) {
+            const snake = k.replace(/([A-Z])/g, '_$1').toLowerCase()
+            result[snake] = v
+        }
+        return result
+    }
+
+    const payload = { ...toSnake(value), id: 'default' }
     const { data, error } = await sb.from(table).upsert(payload).select().single()
     if (error) throw new Error(`[DAL] updateSettings failed: ${error.message}`)
     return data as StoreRecord
